@@ -4,19 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LinguaWorld Hub</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:'Poppins',sans-serif;
 }
+
 body{
 background:linear-gradient(135deg,#2b5876,#4e4376);
 color:#fff;
 min-height:100vh;
 }
+
 header{
 display:flex;
 justify-content:space-between;
@@ -25,9 +30,11 @@ padding:15px 40px;
 background:rgba(0,0,0,0.3);
 backdrop-filter:blur(10px);
 }
+
 header h1{
 font-weight:600;
 }
+
 .language-selector select{
 padding:6px 10px;
 border-radius:6px;
@@ -50,6 +57,7 @@ backdrop-filter:blur(15px);
 box-shadow:0 8px 25px rgba(0,0,0,0.2);
 transition:0.3s ease;
 }
+
 .card:hover{
 transform:translateY(-5px);
 }
@@ -73,6 +81,7 @@ background:#ffffff22;
 .chat-input{
 display:flex;
 }
+
 .chat-input input{
 flex:1;
 padding:8px;
@@ -80,6 +89,7 @@ border-radius:8px 0 0 8px;
 border:none;
 outline:none;
 }
+
 .chat-input button{
 padding:8px 15px;
 border:none;
@@ -111,39 +121,65 @@ background:rgba(0,0,0,0.3);
 grid-template-columns:1fr;
 }
 }
+
 </style>
 </head>
+
 <body>
 
 <header>
 <h1>🌍 LinguaWorld Hub</h1>
+
 <div class="language-selector">
 <select id="language">
+
 <option value="en">English</option>
-<option value="es">Español</option>
-<option value="zh">中文</option>
-<option value="pt">Português</option>
+<option value="es">Spanish</option>
+<option value="pt">Portuguese</option>
+<option value="zh">Mandarin (Chinese)</option>
+<option value="fr">French</option>
+<option value="de">German</option>
+<option value="ar">Arabic</option>
+<option value="hi">Hindi</option>
+<option value="ja">Japanese</option>
+<option value="ko">Korean</option>
+<option value="ru">Russian</option>
+
 </select>
 </div>
+
 </header>
 
 <div class="container">
 
 <div class="card">
+
 <h2 id="chatTitle">Global Chat</h2>
+
 <div class="chat-box" id="chatBox"></div>
+
 <div class="chat-input">
+
 <input type="text" id="chatInput" placeholder="Type your message...">
+
 <button onclick="sendMessage()">Send</button>
+
 </div>
+
 </div>
 
 <div class="card">
+
 <h2 id="gameTitle">Vocabulary Match Game</h2>
+
 <div id="gameQuestion">Click below to start learning!</div>
+
 <div class="game-area">
+
 <button onclick="generateWord()">New Word</button>
+
 </div>
+
 </div>
 
 </div>
@@ -153,52 +189,140 @@ grid-template-columns:1fr;
 </footer>
 
 <script>
+
 const translations = {
-hello:{en:"Hello",es:"Hola",zh:"你好",pt:"Olá"},
-thankyou:{en:"Thank you",es:"Gracias",zh:"谢谢",pt:"Obrigado"},
-friend:{en:"Friend",es:"Amigo",zh:"朋友",pt:"Amigo"},
-culture:{en:"Culture",es:"Cultura",zh:"文化",pt:"Cultura"}
-};
 
-function sendMessage(){
-let input = document.getElementById("chatInput");
-let message = input.value;
-let translated = await translateText(message, lang);
-if(message.trim() === "") return;
+hello:{
+en:"Hello",
+es:"Hola",
+pt:"Olá",
+zh:"你好",
+fr:"Bonjour",
+de:"Hallo",
+ar:"مرحبا",
+hi:"नमस्ते",
+ja:"こんにちは",
+ko:"안녕하세요",
+ru:"Привет"
+},
 
-let chatBox = document.getElementById("chatBox");
-let div = document.createElement("div");
-div.className = "message";
-div.innerText = message;
-chatBox.appendChild(div);
-input.value="";
-chatBox.scrollTop = chatBox.scrollHeight;
+thankyou:{
+en:"Thank you",
+es:"Gracias",
+pt:"Obrigado",
+zh:"谢谢",
+fr:"Merci",
+de:"Danke",
+ar:"شكرا",
+hi:"धन्यवाद",
+ja:"ありがとう",
+ko:"감사합니다",
+ru:"Спасибо"
+},
+
+friend:{
+en:"Friend",
+es:"Amigo",
+pt:"Amigo",
+zh:"朋友",
+fr:"Ami",
+de:"Freund",
+ar:"صديق",
+hi:"दोस्त",
+ja:"友達",
+ko:"친구",
+ru:"Друг"
+},
+
+culture:{
+en:"Culture",
+es:"Cultura",
+pt:"Cultura",
+zh:"文化",
+fr:"Culture",
+de:"Kultur",
+ar:"ثقافة",
+hi:"संस्कृति",
+ja:"文化",
+ko:"문화",
+ru:"Культура"
 }
 
+};
+
+
+function sendMessage(){
+
+let input = document.getElementById("chatInput");
+
+let message = input.value;
+
+if(message.trim()==="") return;
+
+let chatBox = document.getElementById("chatBox");
+
+let div = document.createElement("div");
+
+div.className="message";
+
+div.innerText=message;
+
+chatBox.appendChild(div);
+
+input.value="";
+
+chatBox.scrollTop=chatBox.scrollHeight;
+
+}
+
+
+
 function generateWord(){
+
 let keys = Object.keys(translations);
+
 let randomKey = keys[Math.floor(Math.random()*keys.length)];
+
 let lang = document.getElementById("language").value;
 
 let word = translations[randomKey][lang];
+
 let english = translations[randomKey]["en"];
 
 document.getElementById("gameQuestion").innerHTML =
 `<strong>${word}</strong> → English: <strong>${english}</strong>`;
+
 }
 
+
+
 document.getElementById("language").addEventListener("change", function(){
+
 let lang = this.value;
+
 const titles = {
+
 en:{chat:"Global Chat",game:"Vocabulary Match Game"},
 es:{chat:"Chat Global",game:"Juego de Vocabulario"},
+pt:{chat:"Chat Global",game:"Jogo de Vocabulário"},
 zh:{chat:"全球聊天",game:"词汇匹配游戏"},
-pt:{chat:"Chat Global",game:"Jogo de Vocabulário"}
+fr:{chat:"Chat Mondial",game:"Jeu de Vocabulaire"},
+de:{chat:"Globaler Chat",game:"Vokabelspiel"},
+ar:{chat:"الدردشة العالمية",game:"لعبة المفردات"},
+hi:{chat:"वैश्विक चैट",game:"शब्दावली खेल"},
+ja:{chat:"グローバルチャット",game:"語彙ゲーム"},
+ko:{chat:"글로벌 채팅",game:"어휘 게임"},
+ru:{chat:"Глобальный чат",game:"Игра слов"}
+
 };
-document.getElementById("chatTitle").innerText = titles[lang].chat;
-document.getElementById("gameTitle").innerText = titles[lang].game;
+
+document.getElementById("chatTitle").innerText=titles[lang].chat;
+
+document.getElementById("gameTitle").innerText=titles[lang].game;
+
 });
+
 </script>
-<script src="translator.js"></script>
+
 </body>
 </html>

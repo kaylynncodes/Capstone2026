@@ -163,6 +163,7 @@ culture:{en:"Culture",es:"Cultura",zh:"文化",pt:"Cultura"}
 function sendMessage(){
 let input = document.getElementById("chatInput");
 let message = input.value;
+let translated = await translateText(message, lang);
 if(message.trim() === "") return;
 
 let chatBox = document.getElementById("chatBox");
@@ -198,6 +199,6 @@ document.getElementById("chatTitle").innerText = titles[lang].chat;
 document.getElementById("gameTitle").innerText = titles[lang].game;
 });
 </script>
-
+<script src="translator.js"></script>
 </body>
 </html>

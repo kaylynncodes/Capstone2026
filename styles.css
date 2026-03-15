@@ -1,0 +1,39 @@
+body{
+font-family:Poppins, sans-serif;
+margin:0;
+background:linear-gradient(135deg,#2b5876,#4e4376);
+color:white;
+}
+
+.navbar{
+display:flex;
+justify-content:space-between;
+padding:15px 30px;
+background:rgba(0,0,0,0.3);
+}
+
+.nav-links a{
+margin-left:20px;
+color:white;
+text-decoration:none;
+}
+
+.container{
+padding:40px;
+}
+
+.card{
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+button{
+background:#ff9800;
+border:none;
+padding:10px 15px;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}

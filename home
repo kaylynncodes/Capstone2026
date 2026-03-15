@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinguaWorld Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+body{
+background:linear-gradient(135deg,#2b5876,#4e4376);
+color:#fff;
+min-height:100vh;
+}
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 40px;
+background:rgba(0,0,0,0.3);
+backdrop-filter:blur(10px);
+}
+header h1{
+font-weight:600;
+}
+.language-selector select{
+padding:6px 10px;
+border-radius:6px;
+border:none;
+outline:none;
+}
+
+.container{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+padding:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:15px;
+backdrop-filter:blur(15px);
+box-shadow:0 8px 25px rgba(0,0,0,0.2);
+transition:0.3s ease;
+}
+.card:hover{
+transform:translateY(-5px);
+}
+
+.chat-box{
+height:300px;
+overflow-y:auto;
+background:rgba(0,0,0,0.2);
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.message{
+margin-bottom:8px;
+padding:6px 10px;
+border-radius:8px;
+background:#ffffff22;
+}
+
+.chat-input{
+display:flex;
+}
+.chat-input input{
+flex:1;
+padding:8px;
+border-radius:8px 0 0 8px;
+border:none;
+outline:none;
+}
+.chat-input button{
+padding:8px 15px;
+border:none;
+background:#ff9800;
+color:#fff;
+border-radius:0 8px 8px 0;
+cursor:pointer;
+}
+
+.game-area button{
+margin-top:10px;
+padding:8px 15px;
+border:none;
+border-radius:8px;
+background:#4caf50;
+color:#fff;
+cursor:pointer;
+}
+
+footer{
+text-align:center;
+padding:10px;
+margin-top:20px;
+background:rgba(0,0,0,0.3);
+}
+
+@media(max-width:768px){
+.container{
+grid-template-columns:1fr;
+}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🌍 LinguaWorld Hub</h1>
+<div class="language-selector">
+<select id="language">
+<option value="en">English</option>
+<option value="es">Español</option>
+<option value="zh">中文</option>
+<option value="pt">Português</option>
+</select>
+</div>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2 id="chatTitle">Global Chat</h2>
+<div class="chat-box" id="chatBox"></div>
+<div class="chat-input">
+<input type="text" id="chatInput" placeholder="Type your message...">
+<button onclick="sendMessage()">Send</button>
+</div>
+</div>
+
+<div class="card">
+<h2 id="gameTitle">Vocabulary Match Game</h2>
+<div id="gameQuestion">Click below to start learning!</div>
+<div class="game-area">
+<button onclick="generateWord()">New Word</button>
+</div>
+</div>
+
+</div>
+
+<footer>
+<p>Connect. Learn. Share Cultures. 🌎</p>
+</footer>
+
+<script>
+const translations = {
+hello:{en:"Hello",es:"Hola",zh:"你好",pt:"Olá"},
+thankyou:{en:"Thank you",es:"Gracias",zh:"谢谢",pt:"Obrigado"},
+friend:{en:"Friend",es:"Amigo",zh:"朋友",pt:"Amigo"},
+culture:{en:"Culture",es:"Cultura",zh:"文化",pt:"Cultura"}
+};
+
+function sendMessage(){
+let input = document.getElementById("chatInput");
+let message = input.value;
+if(message.trim() === "") return;
+
+let chatBox = document.getElementById("chatBox");
+let div = document.createElement("div");
+div.className = "message";
+div.innerText = message;
+chatBox.appendChild(div);
+input.value="";
+chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function generateWord(){
+let keys = Object.keys(translations);
+let randomKey = keys[Math.floor(Math.random()*keys.length)];
+let lang = document.getElementById("language").value;
+
+let word = translations[randomKey][lang];
+let english = translations[randomKey]["en"];
+
+document.getElementById("gameQuestion").innerHTML =
+`<strong>${word}</strong> → English: <strong>${english}</strong>`;
+}
+
+document.getElementById("language").addEventListener("change", function(){
+let lang = this.value;
+const titles = {
+en:{chat:"Global Chat",game:"Vocabulary Match Game"},
+es:{chat:"Chat Global",game:"Juego de Vocabulario"},
+zh:{chat:"全球聊天",game:"词汇匹配游戏"},
+pt:{chat:"Chat Global",game:"Jogo de Vocabulário"}
+};
+document.getElementById("chatTitle").innerText = titles[lang].chat;
+document.getElementById("gameTitle").innerText = titles[lang].game;
+});
+</script>
+
+</body>
+</html>

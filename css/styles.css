@@ -6,7 +6,7 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
-background:linear-gradient(135deg,#2b5876,#4e4376);
+background:red;
 color:#fff;
 min-height:100vh;
 }

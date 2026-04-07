@@ -1,0 +1,44 @@
+document.addEventListener("DOMContentLoaded", () => {
+
+  const navbar = `
+  
+  <header class="navbar">
+
+    <div class="logo">🌍 LinguaWorld</div>
+
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="games.html">Study Games</a>
+      <a href="chat.html">Language Chat</a>
+      <a href="students.html">Student Stories</a>
+      <a href="teachers.html">Teacher Resources</a>
+      <a href="login.html">Login</a>
+    </nav>
+
+    <div class="language-selector">
+      <select id="language">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="pt">Português</option>
+        <option value="zh">中文</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="ar">العربية</option>
+        <option value="hi">हिन्दी</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="ru">Русский</option>
+      </select>
+    </div>
+
+  </header>
+  `;
+
+  document.body.insertAdjacentHTML("afterbegin", navbar);
+
+  // attach translation event
+  document.getElementById("language").addEventListener("change", function () {
+    translatePage(this.value);
+  });
+
+});

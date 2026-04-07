@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+<meta charset="UTF-8">
 <title>LinguaWorld Hub</title>
+
 <link rel="stylesheet" href="css/styles.css">
+
 </head>
 
 <body>
 
-<nav class="navbar">
+<div class="navbar">
+
 <div class="logo">🌍 LinguaWorld</div>
+
 <div class="nav-links">
 <a href="index.html">Home</a>
 <a href="games.html">Study Games</a>
@@ -17,43 +23,64 @@
 <a href="teachers.html">Teacher Resources</a>
 <a href="login.html">Login</a>
 </div>
-</nav>
+
+<div class="language-selector">
+<select onchange="translatePage(this.value)">
+
+<option value="en">English</option>
+<option value="es">Español</option>
+<option value="pt">Português</option>
+<option value="zh">中文</option>
+<option value="fr">Français</option>
+<option value="de">Deutsch</option>
+<option value="ar">العربية</option>
+<option value="hi">हिन्दी</option>
+<option value="ja">日本語</option>
+<option value="ko">한국어</option>
+<option value="ru">Русский</option>
+
+</select>
+</div>
+
+</div>
 
 <div class="container">
 
-<h1>Learn English Without Losing Your Language</h1>
+<h1 data-translate>Learn English Without Losing Your Language</h1>
 
 <div class="card">
-<h2>Languages Supported</h2>
+<h2 data-translate>Languages Supported</h2>
 
-<p>
+<p data-translate>
 English, Español, Português, 中文, Français,
 Deutsch, العربية, हिन्दी, 日本語, 한국어, Русский
 </p>
 </div>
 
 <div class="card">
-<h2>What You Can Do Here</h2>
+<h2 data-translate>What You Can Do Here</h2>
 
 <ul>
-<li>Practice vocabulary games</li>
-<li>Chat with learners around the world</li>
-<li>Read multilingual student stories</li>
-<li>Access teacher lesson plans</li>
+<li data-translate>Practice vocabulary games</li>
+<li data-translate>Chat with learners around the world</li>
+<li data-translate>Read multilingual student stories</li>
+<li data-translate>Access teacher lesson plans</li>
 </ul>
 </div>
 
 <div class="card">
-<h2>Learning Paths</h2>
+<h2 data-translate>Learning Paths</h2>
 
 <ul>
-<li>English speaker learning Spanish</li>
-<li>Spanish speaker learning English</li>
-<li>Russian speaker learning Portuguese</li>
+<li data-translate>English speaker learning Spanish</li>
+<li data-translate>Spanish speaker learning English</li>
+<li data-translate>Russian speaker learning Portuguese</li>
 </ul>
 </div>
 
 </div>
+
+<script src="translator.js"></script>
 
 </body>
 </html>

@@ -41,22 +41,62 @@ const LANG = {
     ko: "언어 채팅",
     ru: "Языковой чат"
   },
+  home: {
+    en: "Home",
+    es: "Inicio",
+    pt: "Início",
+    zh: "首页",
+    fr: "Accueil",
+    de: "Startseite",
+    ar: "الرئيسية",
+    hi: "मुखपृष्ठ",
+    ja: "ホーム",
+    ko: "홈",
+    ru: "Главная"
+  },
 
-  login: {
-    en: "Login",
-    es: "Iniciar sesión",
-    pt: "Entrar",
-    zh: "登录",
-    fr: "Connexion",
-    de: "Anmelden",
-    ar: "تسجيل الدخول",
-    hi: "लॉगिन",
-    ja: "ログイン",
-    ko: "로그인",
-    ru: "Вход"
-  }
+  students: {
+    en: "Student Stories",
+    es: "Historias de Estudiantes",
+    pt: "Histórias de Estudantes",
+    zh: "学生故事",
+    fr: "Histoires d'Étudiants",
+    de: "Studentengeschichten",
+    ar: "قصص الطلاب",
+    hi: "छात्र कहानियाँ",
+    ja: "学生の物語",
+    ko: "학생 이야기",
+    ru: "Истории студентов"
+  },
 
-};
+  teachers: {
+    en: "Teacher Resources",
+    es: "Recursos para Profesores",
+    pt: "Recursos para Professores",
+    zh: "教师资源",
+    fr: "Ressources pour Enseignants",
+    de: "Lehrmaterialien",
+    ar: "موارد المعلمين",
+    hi: "शिक्षक संसाधन",
+    ja: "教師向け資料",
+    ko: "교사용 자료",
+    ru: "Ресурсы для учителей"
+  },
+    login: {
+      en: "Login",
+      es: "Iniciar sesión",
+      pt: "Entrar",
+      zh: "登录",
+      fr: "Connexion",
+      de: "Anmelden",
+      ar: "تسجيل الدخول",
+      hi: "लॉगिन",
+      ja: "ログイン",
+      ko: "로그인",
+      ru: "Вход"
+    }
+
+  };
 
 function setLanguage(lang){
 

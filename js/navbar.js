@@ -16,19 +16,21 @@ document.addEventListener("DOMContentLoaded", () => {
     </nav>
 
     <div class="language-selector">
-      <select id="language">
-        <option value="en">English</option>
-        <option value="es">Español</option>
-        <option value="pt">Português</option>
-        <option value="zh">中文</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-        <option value="ar">العربية</option>
-        <option value="hi">हिन्दी</option>
-        <option value="ja">日本語</option>
-        <option value="ko">한국어</option>
+      <select onchange="setLanguage(this.value)">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="pt">Português</option>
+          <option value="zh">中文</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+          <option value="ar">العربية</option>
+          <option value="hi">हिन्दी</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
         <option value="ru">Русский</option>
+
       </select>
+
     </div>
 
   </header>
@@ -42,3 +44,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+

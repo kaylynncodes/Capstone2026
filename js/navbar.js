@@ -7,15 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="logo">🌍 LinguaWorld</div>
 
     <nav class="nav-links">
-    <a href="games.html" data-key="games"></a>
-    <a href="chat.html" data-key="chat"></a>
-    <a href="login.html" data-key="login"></a>
-      <a href="index.html">Home</a>
-      <a href="games.html">Study Games</a>
-      <a href="chat.html">Language Chat</a>
-      <a href="students.html">Student Stories</a>
-      <a href="teachers.html">Teacher Resources</a>
-      <a href="login.html">Login</a>
+      <a href="index.html" data-key="home">Home</a>
+      <a href="games.html" data-key="games">Games</a>
+      <a href="chat.html" data-key="chat">Chat</a>
+      <a href="students.html" data-key="students">Students</a>
+      <a href="teachers.html" data-key="teachers">Teachers</a>
+      <a href="login.html" data-key="login">Login</a>
     </nav>
 
     <div class="language-selector">

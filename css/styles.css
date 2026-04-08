@@ -4,7 +4,28 @@ padding:0;
 box-sizing:border-box;
 font-family:'Poppins',sans-serif;
 }
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 40px;
+background:rgba(0,0,0,0.3);
+backdrop-filter:blur(10px);
+}
 
+.nav-links{
+display:flex;
+gap:15px;
+}
+
+.nav-links a{
+color:white;
+text-decoration:none;
+}
+
+.nav-links a:hover{
+text-decoration:underline;
+}
 body{
 background:linear-gradient(135deg,#2b5876,#4e4376);
 color:#fff;

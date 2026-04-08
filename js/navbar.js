@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="logo">🌍 LinguaWorld</div>
 
     <nav class="nav-links">
+    <a href="games.html" data-key="games"></a>
+    <a href="chat.html" data-key="chat"></a>
+    <a href="login.html" data-key="login"></a>
       <a href="index.html">Home</a>
       <a href="games.html">Study Games</a>
       <a href="chat.html">Language Chat</a>

@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   const navbar = `
-  
   <header class="navbar">
 
     <div class="logo">🌍 LinguaWorld</div>
@@ -16,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </nav>
 
     <div class="language-selector">
-      <select onchange="setLanguage(this.value)">
+      <select id="language" onchange="setLanguage(this.value)">
           <option value="en">English</option>
           <option value="es">Español</option>
           <option value="pt">Português</option>
@@ -28,9 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <option value="ja">日本語</option>
           <option value="ko">한국어</option>
           <option value="ru">Русский</option>
-
       </select>
-
     </div>
 
   </header>
@@ -38,10 +35,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.body.insertAdjacentHTML("afterbegin", navbar);
 
-  // attach translation event
-  document.getElementById("language").addEventListener("change", function () {
-    translatePage(this.value);
-  });
+  // wait for navbar to exist, then translate
+  setTimeout(() => {
+    if(typeof updateUI === "function"){
+      updateUI();
+    }
+    if(typeof syncDropdown === "function"){
+      syncDropdown();
+    }
+  }, 50);
 
 });
-

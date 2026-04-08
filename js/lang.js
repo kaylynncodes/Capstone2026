@@ -14,110 +14,55 @@ const LANG = {
     ru: "Изучайте английский, не теряя родной язык"
   },
 
-  games: {
-    en: "Study Games",
-    es: "Juegos de estudio",
-    pt: "Jogos de estudo",
-    zh: "学习游戏",
-    fr: "Jeux d'étude",
-    de: "Lernspiele",
-    ar: "ألعاب تعليمية",
-    hi: "अध्ययन खेल",
-    ja: "学習ゲーム",
-    ko: "학습 게임",
-    ru: "Обучающие игры"
-  },
+  home: { en:"Home", es:"Inicio", pt:"Início", zh:"首页", fr:"Accueil", de:"Startseite", ar:"الرئيسية", hi:"मुखपृष्ठ", ja:"ホーム", ko:"홈", ru:"Главная" },
 
-  chat: {
-    en: "Language Chat",
-    es: "Chat de Idiomas",
-    pt: "Chat de Idiomas",
-    zh: "语言聊天",
-    fr: "Chat Linguistique",
-    de: "Sprach-Chat",
-    ar: "دردشة اللغات",
-    hi: "भाषा चैट",
-    ja: "言語チャット",
-    ko: "언어 채팅",
-    ru: "Языковой чат"
-  },
-  home: {
-    en: "Home",
-    es: "Inicio",
-    pt: "Início",
-    zh: "首页",
-    fr: "Accueil",
-    de: "Startseite",
-    ar: "الرئيسية",
-    hi: "मुखपृष्ठ",
-    ja: "ホーム",
-    ko: "홈",
-    ru: "Главная"
-  },
+  games: { en:"Study Games", es:"Juegos de estudio", pt:"Jogos de estudo", zh:"学习游戏", fr:"Jeux d'étude", de:"Lernspiele", ar:"ألعاب تعليمية", hi:"अध्ययन खेल", ja:"学習ゲーム", ko:"학습 게임", ru:"Обучающие игры" },
 
-  students: {
-    en: "Student Stories",
-    es: "Historias de Estudiantes",
-    pt: "Histórias de Estudantes",
-    zh: "学生故事",
-    fr: "Histoires d'Étudiants",
-    de: "Studentengeschichten",
-    ar: "قصص الطلاب",
-    hi: "छात्र कहानियाँ",
-    ja: "学生の物語",
-    ko: "학생 이야기",
-    ru: "Истории студентов"
-  },
+  chat: { en:"Language Chat", es:"Chat de Idiomas", pt:"Chat de Idiomas", zh:"语言聊天", fr:"Chat Linguistique", de:"Sprach-Chat", ar:"دردشة اللغات", hi:"भाषा चैट", ja:"言語チャット", ko:"언어 채팅", ru:"Языковой чат" },
 
-  teachers: {
-    en: "Teacher Resources",
-    es: "Recursos para Profesores",
-    pt: "Recursos para Professores",
-    zh: "教师资源",
-    fr: "Ressources pour Enseignants",
-    de: "Lehrmaterialien",
-    ar: "موارد المعلمين",
-    hi: "शिक्षक संसाधन",
-    ja: "教師向け資料",
-    ko: "교사용 자료",
-    ru: "Ресурсы для учителей"
-  },
-    login: {
-      en: "Login",
-      es: "Iniciar sesión",
-      pt: "Entrar",
-      zh: "登录",
-      fr: "Connexion",
-      de: "Anmelden",
-      ar: "تسجيل الدخول",
-      hi: "लॉगिन",
-      ja: "ログイン",
-      ko: "로그인",
-      ru: "Вход"
-    }
+  students: { en:"Student Stories", es:"Historias de Estudiantes", pt:"Histórias de Estudantes", zh:"学生故事", fr:"Histoires d'Étudiants", de:"Studentengeschichten", ar:"قصص الطلاب", hi:"छात्र कहानियाँ", ja:"学生の物語", ko:"학생 이야기", ru:"Истории студентов" },
 
-  };
+  teachers: { en:"Teacher Resources", es:"Recursos para Profesores", pt:"Recursos para Professores", zh:"教师资源", fr:"Ressources pour Enseignants", de:"Lehrmaterialien", ar:"موارد المعلمين", hi:"शिक्षक संसाधन", ja:"教師向け資料", ko:"교사용 자료", ru:"Ресурсы для учителей" },
+
+  login: { en:"Login", es:"Iniciar sesión", pt:"Entrar", zh:"登录", fr:"Connexion", de:"Anmelden", ar:"تسجيل الدخول", hi:"लॉगिन", ja:"ログイン", ko:"로그인", ru:"Вход" },
+
+  languages: { en:"Languages Supported", es:"Idiomas Soportados", pt:"Idiomas Suportados", zh:"支持的语言", fr:"Langues prises en charge", de:"Unterstützte Sprachen", ar:"اللغات المدعومة", hi:"समर्थित भाषाएँ", ja:"対応言語", ko:"지원 언어", ru:"Поддерживаемые языки" },
+
+  features: { en:"What You Can Do Here", es:"Lo que puedes hacer aquí", pt:"O que você pode fazer aqui", zh:"你可以在这里做什么", fr:"Ce que vous pouvez faire ici", de:"Was Sie hier tun können", ar:"ما يمكنك القيام به هنا", hi:"आप यहाँ क्या कर सकते हैं", ja:"ここでできること", ko:"여기서 할 수 있는 것", ru:"Что вы можете делать здесь" },
+
+  paths: { en:"Learning Paths", es:"Rutas de aprendizaje", pt:"Caminhos de aprendizagem", zh:"学习路径", fr:"Parcours d'apprentissage", de:"Lernpfade", ar:"مسارات التعلم", hi:"सीखने के मार्ग", ja:"学習パス", ko:"학습 경로", ru:"Учебные пути" }
+
+};
 
 function setLanguage(lang){
-
-localStorage.setItem("lang", lang);
-
-updateUI();
-
+  localStorage.setItem("lang", lang);
+  updateUI();
+  syncDropdown();
 }
 
 function updateUI(){
+  const lang = localStorage.getItem("lang") || "en";
 
-const lang = localStorage.getItem("lang") || "en";
+  document.querySelectorAll("[data-key]").forEach(el => {
+    const key = el.getAttribute("data-key");
 
-document.querySelectorAll("[data-key]").forEach(el => {
-
-const key = el.getAttribute("data-key");
-
-if(LANG[key]){
-el.innerText = LANG[key][lang];
+    if(LANG[key] && LANG[key][lang]){
+      el.innerText = LANG[key][lang];
+    } else if(LANG[key]){
+      el.innerText = LANG[key]["en"];
+    }
+  });
 }
 
+function syncDropdown(){
+  const lang = localStorage.getItem("lang") || "en";
+  const dropdown = document.getElementById("language");
+  if(dropdown){
+    dropdown.value = lang;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateUI();
+  syncDropdown();
 });
-
-}

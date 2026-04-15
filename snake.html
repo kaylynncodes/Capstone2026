@@ -7,30 +7,22 @@
 <link rel="stylesheet" href="css/styles.css">
 
 <style>
-
-/* GAME WRAPPER (fits your design) */
 .game-wrapper {
   max-width: 500px;
   margin: 40px auto;
 }
 
-/* CANVAS INSIDE CARD */
 canvas {
   width: 100%;
   background: #111;
   border-radius: 10px;
 }
 
-/* QUIZ OVERLAY (matches glass style) */
 #quiz-box {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(0,0,0,0.6);
   backdrop-filter: blur(10px);
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,70 +30,42 @@ canvas {
 }
 
 .quiz-card {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.15);
   padding: 20px;
   border-radius: 15px;
-  backdrop-filter: blur(15px);
-  text-align: center;
   width: 300px;
+  text-align: center;
 }
 
-.quiz-card input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: none;
-}
-
-.quiz-card button {
-  margin-top: 10px;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  background: #fff;
-  cursor: pointer;
-}
-
-.hidden {
-  display: none;
-}
-
+.hidden { display:none; }
 </style>
 </head>
 
 <body>
-
-<script src="js/navbar.js"></script>
 
 <header>
   <h1>Snake Study Game</h1>
 </header>
 
 <div class="container">
-
   <div class="card game-wrapper" style="position:relative;">
 
     <canvas id="game" width="400" height="400"></canvas>
 
-    <!-- QUIZ -->
     <div id="quiz-box" class="hidden">
       <div class="quiz-card">
         <h2 id="question"></h2>
-
-        <input id="answer" placeholder="Type answer...">
-
+        <input id="answer" placeholder="Type answer">
         <button onclick="checkAnswer()">Submit</button>
-
         <p id="feedback"></p>
       </div>
     </div>
 
   </div>
-
 </div>
+
 <script>
-// ---------------- GAME ----------------
+// ===== GAME =====
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
@@ -110,16 +74,14 @@ let food={x:5,y:5};
 let dx=1,dy=0;
 
 let quizActive=false;
-let gameStarted=false;
 let currentAnswer="";
 
-// DOM
-const quizBox = document.getElementById("quiz-box");
-const questionEl = document.getElementById("question");
-const answerEl = document.getElementById("answer");
-const feedbackEl = document.getElementById("feedback");
+const quizBox=document.getElementById("quiz-box");
+const questionEl=document.getElementById("question");
+const answerEl=document.getElementById("answer");
+const feedbackEl=document.getElementById("feedback");
 
-// INPUT
+// movement
 document.addEventListener("keydown",e=>{
   if(e.key==="ArrowUp"){dx=0;dy=-1;}
   if(e.key==="ArrowDown"){dx=0;dy=1;}
@@ -127,7 +89,6 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowRight"){dx=1;dy=0;}
 });
 
-// ---------------- DRAW GAME ----------------
 function draw(){
   if(quizActive) return;
 
@@ -148,49 +109,24 @@ function draw(){
   ctx.fillRect(food.x*20,food.y*20,18,18);
 }
 
-// ---------------- DATA ----------------
+// ===== DATA =====
 const params=new URLSearchParams(window.location.search);
 const mode=params.get("mode") || "emotions_vocab";
 const lang=params.get("lang") || "es";
 
 const data={
-  emotions_vocab:[
-    ["happy","feliz"],["sad","triste"],["angry","enojado"],
-    ["tired","cansado"],["excited","emocionado"],
-    ["scared","asustado"],["calm","tranquilo"]
-  ],
-
-  verbs_core:[
-    ["I am","yo soy/estoy"],
-    ["I have","yo tengo"],
-    ["I want","yo quiero"],
-    ["I need","yo necesito"],
-    ["I go","yo voy"]
-  ],
-
-  emotions_sentences:[
-    ["I am happy","estoy feliz"],
-    ["I feel sad","me siento triste"]
-  ],
-
-  greetings:[
-    ["hello","hola"],
-    ["good morning","buenos días"],
-    ["how are you","cómo estás"]
-  ],
-
-  survival:[
-    ["where is the bathroom","dónde está el baño"],
-    ["i need help","necesito ayuda"]
-  ]
+  emotions_vocab:[["happy","feliz"],["sad","triste"],["angry","enojado"],["tired","cansado"],["excited","emocionado"]],
+  verbs_core:[["I have","yo tengo"],["I want","yo quiero"],["I need","yo necesito"]],
+  emotions_sentences:[["I am happy","estoy feliz"]],
+  greetings:[["hello","hola"],["good morning","buenos días"]],
+  survival:[["where is the bathroom","dónde está el baño"],["i need help","necesito ayuda"]]
 };
 
-// ---------------- QUESTION SYSTEM ----------------
+// ===== QUIZ =====
 function showQuestion(){
   const set=data[mode];
-
   if(!set){
-    questionEl.innerText="Mode not found";
+    questionEl.innerText="Invalid mode";
     quizBox.classList.remove("hidden");
     quizActive=true;
     return;
@@ -201,65 +137,49 @@ function showQuestion(){
   const pair=set[Math.floor(Math.random()*set.length)];
 
   if(lang==="es"){
-    questionEl.innerText=pair[0] + " → Spanish";
+    questionEl.innerText=pair[0]+" → Spanish";
     currentAnswer=pair[1];
   } else {
-    questionEl.innerText=pair[1] + " → English";
+    questionEl.innerText=pair[1]+" → English";
     currentAnswer=pair[0];
   }
 
   answerEl.value="";
   feedbackEl.innerText="";
-
   quizBox.classList.remove("hidden");
   answerEl.focus();
 }
 
-// ---------------- ANSWER CHECK ----------------
 function checkAnswer(){
   const input=answerEl.value.trim().toLowerCase();
   const correct=currentAnswer.toLowerCase();
 
-  if(input===correct || input.includes(correct) || correct.includes(input)){
+  if(input===correct || input.includes(correct)){
     feedbackEl.innerText="Correct!";
-
     setTimeout(()=>{
       quizBox.classList.add("hidden");
       quizActive=false;
-    },900);
-
+    },800);
   } else {
     feedbackEl.innerText="Try again!";
   }
 }
 
-// ENTER KEY
 answerEl.addEventListener("keydown",e=>{
   if(e.key==="Enter") checkAnswer();
 });
 
-// ---------------- GAME LOOP ----------------
-function loop(){
-  draw();
-  requestAnimationFrame(loop);
-}
+// start game
+setInterval(draw,100);
 
-// ---------------- FLOW CONTROL ----------------
+// first question
+setTimeout(showQuestion,2000);
 
-// start game immediately
-loop();
-
-// FIRST QUESTION after delay (guaranteed)
-setTimeout(()=>{
-  showQuestion();
-},3000);
-
-// repeat questions every 15s ONLY when not active
+// repeat questions
 setInterval(()=>{
-  if(!quizActive){
-    showQuestion();
-  }
+  if(!quizActive) showQuestion();
 },15000);
 </script>
+
 </body>
 </html>

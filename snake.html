@@ -4,90 +4,113 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Snake Study Game</title>
+<link rel="stylesheet" href="css/styles.css">
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial;
-}
 
-/* GAME CONTAINER ONLY */
-#game-container {
-  width: 100%;
+/* GAME WRAPPER (fits your design) */
+.game-wrapper {
   max-width: 500px;
   margin: 40px auto;
-  text-align: center;
-  background: black;
-  padding: 20px;
-  border-radius: 10px;
-  position: relative;
 }
 
+/* CANVAS INSIDE CARD */
 canvas {
+  width: 100%;
   background: #111;
-  display: block;
-  margin: auto;
+  border-radius: 10px;
 }
 
-/* QUIZ OVERLAY */
+/* QUIZ OVERLAY (matches glass style) */
 #quiz-box {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
 
   display: flex;
   justify-content: center;
   align-items: center;
-
   z-index: 100;
 }
 
 .quiz-card {
-  background: #111;
+  background: rgba(255,255,255,0.1);
   padding: 20px;
-  border: 2px solid #0f0;
-  max-width: 300px;
+  border-radius: 15px;
+  backdrop-filter: blur(15px);
+  text-align: center;
+  width: 300px;
+}
+
+.quiz-card input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+.quiz-card button {
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
 }
 
 .hidden {
   display: none;
 }
+
 </style>
 </head>
 
 <body>
 
-<div id="game-container">
+<script src="js/navbar.js"></script>
+
+<header>
   <h1>Snake Study Game</h1>
-  <canvas id="game" width="400" height="400"></canvas>
+</header>
 
-  <!-- QUIZ -->
-  <div id="quiz-box" class="hidden">
-    <div class="quiz-card">
-      <h2 id="question"></h2>
+<div class="container">
 
-      <input id="answer" placeholder="Type answer..." autocomplete="off">
-      <br><br>
+  <div class="card game-wrapper" style="position:relative;">
 
-      <button onclick="checkAnswer()">Submit</button>
-      <p id="feedback"></p>
+    <canvas id="game" width="400" height="400"></canvas>
+
+    <!-- QUIZ -->
+    <div id="quiz-box" class="hidden">
+      <div class="quiz-card">
+        <h2 id="question"></h2>
+
+        <input id="answer" placeholder="Type answer...">
+
+        <button onclick="checkAnswer()">Submit</button>
+
+        <p id="feedback"></p>
+      </div>
     </div>
+
   </div>
+
 </div>
 
 <script>
-// ---------------- GAME ----------------
+// GAME
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-let snake = [{x:10,y:10}];
-let food = {x:5,y:5};
-let dx=1, dy=0;
+let snake=[{x:10,y:10}];
+let food={x:5,y:5};
+let dx=1,dy=0;
 
-document.addEventListener("keydown", e=>{
+document.addEventListener("keydown",e=>{
   if(e.key==="ArrowUp"){dx=0;dy=-1;}
   if(e.key==="ArrowDown"){dx=0;dy=1;}
   if(e.key==="ArrowLeft"){dx=-1;dy=0;}
@@ -114,121 +137,66 @@ function draw(){
   ctx.fillRect(food.x*20,food.y*20,18,18);
 }
 
-// ---------------- STUDY SYSTEM ----------------
-const params = new URLSearchParams(window.location.search);
-const mode = params.get("mode");
-const lang = params.get("lang") || "es";
+// STUDY SYSTEM
+const params=new URLSearchParams(window.location.search);
+const mode=params.get("mode");
+const lang=params.get("lang")||"es";
 
-const data = {
-  emotions_vocab: [
-    ["happy","feliz"],["sad","triste"],["angry","enojado"],
-    ["tired","cansado"],["excited","emocionado"],
-    ["nervous","nervioso"],["calm","tranquilo"],
-    ["confused","confundido"],["scared","asustado"],
-    ["proud","orgulloso"],["jealous","celoso"],
-    ["bored","aburrido"],["sick","enfermo"],["stressed","estresado"]
-  ],
-
-  verbs_core: [
-    ["I am (permanent)","yo soy"],
-    ["I am (temporary)","yo estoy"],
-    ["I have","yo tengo"],
-    ["I want","yo quiero"],
-    ["I need","yo necesito"],
-    ["I go","yo voy"],
-    ["I eat","yo como"],
-    ["I drink","yo bebo"]
-  ],
-
-  emotions_sentences: [
-    ["I am happy","estoy feliz"],
-    ["I am sad","estoy triste"],
-    ["I feel nervous","me siento nervioso"],
-    ["I feel calm","me siento tranquilo"]
-  ],
-
-  greetings: [
-    ["hello","hola"],
-    ["good morning","buenos días"],
-    ["good afternoon","buenas tardes"],
-    ["good night","buenas noches"],
-    ["how are you","cómo estás"],
-    ["nice to meet you","mucho gusto"]
-  ],
-
-  survival: [
-    ["where is the bathroom","dónde está el baño"],
-    ["i need help","necesito ayuda"],
-    ["can you help me","puedes ayudarme"],
-    ["i don't understand","no entiendo"],
-    ["please speak slowly","por favor habla despacio"],
-    ["how much is this","cuánto cuesta esto"]
-  ]
+const data={
+  emotions_vocab:[["happy","feliz"],["sad","triste"],["angry","enojado"],["tired","cansado"],["excited","emocionado"]],
+  verbs_core:[["I have","yo tengo"],["I want","yo quiero"],["I need","yo necesito"]],
+  emotions_sentences:[["I am happy","estoy feliz"],["I am sad","estoy triste"]],
+  greetings:[["hello","hola"],["good morning","buenos días"]],
+  survival:[["where is the bathroom","dónde está el baño"],["i need help","necesito ayuda"]]
 };
 
-let quizActive = false;
-let currentAnswer = "";
+let quizActive=false;
+let currentAnswer="";
 
-// SHOW QUESTION
 function showQuestion(){
-  const set = data[mode];
+  const set=data[mode];
+  if(!set) return;
 
-  if (!set) {
-    console.error("Mode not found:", mode);
-    return;
-  }
+  quizActive=true;
 
-  quizActive = true;
-
-  const pair = set[Math.floor(Math.random()*set.length)];
+  const pair=set[Math.floor(Math.random()*set.length)];
 
   if(lang==="es"){
-    document.getElementById("question").innerText = pair[0] + " → Spanish";
-    currentAnswer = pair[1];
+    question.innerText=pair[0]+" → Spanish";
+    currentAnswer=pair[1];
   } else {
-    document.getElementById("question").innerText = pair[1] + " → English";
-    currentAnswer = pair[0];
+    question.innerText=pair[1]+" → English";
+    currentAnswer=pair[0];
   }
 
   document.getElementById("quiz-box").classList.remove("hidden");
 }
 
-// CHECK ANSWER
 function checkAnswer(){
-  const input = document.getElementById("answer").value.trim().toLowerCase();
-  const correct = currentAnswer.toLowerCase();
+  const input=answer.value.trim().toLowerCase();
+  const correct=currentAnswer.toLowerCase();
 
-  if(input === correct || input.includes(correct) || correct.includes(input)){
-    document.getElementById("feedback").innerText = "Correct!";
-
+  if(input===correct||input.includes(correct)||correct.includes(input)){
+    feedback.innerText="Correct!";
     setTimeout(()=>{
-      document.getElementById("quiz-box").classList.add("hidden");
-      document.getElementById("answer").value="";
-      document.getElementById("feedback").innerText="";
+      quiz-box.classList.add("hidden");
+      answer.value="";
+      feedback.innerText="";
       quizActive=false;
     },1000);
-
   } else {
-    document.getElementById("feedback").innerText =
-      "Wrong! Correct: " + currentAnswer;
+    feedback.innerText="Wrong! "+currentAnswer;
   }
 }
 
-// ENTER KEY SUPPORT
-document.getElementById("answer").addEventListener("keydown", function(e){
-  if(e.key==="Enter"){
-    checkAnswer();
-  }
+answer.addEventListener("keydown",e=>{
+  if(e.key==="Enter") checkAnswer();
 });
 
-// QUIZ TIMER (15 seconds)
 setInterval(()=>{
-  if(!quizActive){
-    showQuestion();
-  }
+  if(!quizActive) showQuestion();
 },15000);
 
-// START GAME
 setInterval(draw,150);
 </script>
 

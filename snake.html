@@ -65,23 +65,25 @@ canvas {
 </div>
 
 <script>
-// ===== GAME =====
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
+// ---------------- GAME STATE ----------------
 let snake=[{x:10,y:10}];
 let food={x:5,y:5};
 let dx=1,dy=0;
 
 let quizActive=false;
 let currentAnswer="";
+let quizTimer;
 
+// ---------------- DOM ----------------
 const quizBox=document.getElementById("quiz-box");
 const questionEl=document.getElementById("question");
 const answerEl=document.getElementById("answer");
 const feedbackEl=document.getElementById("feedback");
 
-// movement
+// ---------------- INPUT ----------------
 document.addEventListener("keydown",e=>{
   if(e.key==="ArrowUp"){dx=0;dy=-1;}
   if(e.key==="ArrowDown"){dx=0;dy=1;}
@@ -89,48 +91,61 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowRight"){dx=1;dy=0;}
 });
 
-function draw(){
-  if(quizActive) return;
+// ---------------- GAME LOOP ----------------
+function gameLoop(){
+  if(!quizActive){
+    ctx.clearRect(0,0,400,400);
 
-  ctx.clearRect(0,0,400,400);
+    snake.unshift({x:snake[0].x+dx,y:snake[0].y+dy});
 
-  snake.unshift({x:snake[0].x+dx,y:snake[0].y+dy});
+    if(snake[0].x===food.x && snake[0].y===food.y){
+      food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)};
+    } else {
+      snake.pop();
+    }
 
-  if(snake[0].x===food.x && snake[0].y===food.y){
-    food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)};
-  } else {
-    snake.pop();
+    ctx.fillStyle="lime";
+    snake.forEach(s=>ctx.fillRect(s.x*20,s.y*20,18,18));
+
+    ctx.fillStyle="red";
+    ctx.fillRect(food.x*20,food.y*20,18,18);
   }
 
-  ctx.fillStyle="lime";
-  snake.forEach(s=>ctx.fillRect(s.x*20,s.y*20,18,18));
-
-  ctx.fillStyle="red";
-  ctx.fillRect(food.x*20,food.y*20,18,18);
+  requestAnimationFrame(gameLoop);
 }
 
-// ===== DATA =====
+// ---------------- DATA ----------------
 const params=new URLSearchParams(window.location.search);
 const mode=params.get("mode") || "emotions_vocab";
 const lang=params.get("lang") || "es";
 
 const data={
-  emotions_vocab:[["happy","feliz"],["sad","triste"],["angry","enojado"],["tired","cansado"],["excited","emocionado"]],
-  verbs_core:[["I have","yo tengo"],["I want","yo quiero"],["I need","yo necesito"]],
-  emotions_sentences:[["I am happy","estoy feliz"]],
-  greetings:[["hello","hola"],["good morning","buenos días"]],
-  survival:[["where is the bathroom","dónde está el baño"],["i need help","necesito ayuda"]]
+  emotions_vocab:[
+    ["happy","feliz"],["sad","triste"],["angry","enojado"],
+    ["tired","cansado"],["excited","emocionado"]
+  ],
+  verbs_core:[
+    ["I have","yo tengo"],
+    ["I want","yo quiero"],
+    ["I need","yo necesito"]
+  ],
+  emotions_sentences:[
+    ["I am happy","estoy feliz"]
+  ],
+  greetings:[
+    ["hello","hola"],
+    ["good morning","buenos días"]
+  ],
+  survival:[
+    ["where is the bathroom","dónde está el baño"],
+    ["i need help","necesito ayuda"]
+  ]
 };
 
-// ===== QUIZ =====
+// ---------------- QUIZ ----------------
 function showQuestion(){
   const set=data[mode];
-  if(!set){
-    questionEl.innerText="Invalid mode";
-    quizBox.classList.remove("hidden");
-    quizActive=true;
-    return;
-  }
+  if(!set) return;
 
   quizActive=true;
 
@@ -150,16 +165,23 @@ function showQuestion(){
   answerEl.focus();
 }
 
+// ---------------- ANSWER ----------------
 function checkAnswer(){
   const input=answerEl.value.trim().toLowerCase();
   const correct=currentAnswer.toLowerCase();
 
   if(input===correct || input.includes(correct)){
     feedbackEl.innerText="Correct!";
+
     setTimeout(()=>{
       quizBox.classList.add("hidden");
       quizActive=false;
+
+      // 🔥 IMPORTANT: restart timer AFTER correct answer
+      startQuizTimer();
+
     },800);
+
   } else {
     feedbackEl.innerText="Try again!";
   }
@@ -169,17 +191,20 @@ answerEl.addEventListener("keydown",e=>{
   if(e.key==="Enter") checkAnswer();
 });
 
-// start game
-setInterval(draw,100);
+// ---------------- TIMER SYSTEM ----------------
+function startQuizTimer(){
+  clearTimeout(quizTimer);
 
-// first question
-setTimeout(showQuestion,2000);
+  quizTimer = setTimeout(()=>{
+    if(!quizActive){
+      showQuestion();
+    }
+  },15000);
+}
 
-// repeat questions
-setInterval(()=>{
-  if(!quizActive) showQuestion();
-},15000);
+// ---------------- START ----------------
+gameLoop();
+startQuizTimer();
 </script>
-
 </body>
 </html>

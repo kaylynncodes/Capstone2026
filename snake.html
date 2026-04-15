@@ -100,9 +100,8 @@ canvas {
   </div>
 
 </div>
-
 <script>
-// GAME
+// ---------------- GAME ----------------
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
@@ -137,7 +136,7 @@ function draw(){
   ctx.fillRect(food.x*20,food.y*20,18,18);
 }
 
-// STUDY SYSTEM
+// ---------------- STUDY SYSTEM ----------------
 const params=new URLSearchParams(window.location.search);
 const mode=params.get("mode");
 const lang=params.get("lang")||"es";
@@ -153,6 +152,16 @@ const data={
 let quizActive=false;
 let currentAnswer="";
 
+// DOM elements (fixes your bug)
+const quizBox = document.getElementById("quiz-box");
+const questionEl = document.getElementById("question");
+const answerEl = document.getElementById("answer");
+const feedbackEl = document.getElementById("feedback");
+
+// IMPORTANT: ensure quiz is hidden at start
+quizBox.classList.add("hidden");
+
+// SHOW QUESTION
 function showQuestion(){
   const set=data[mode];
   if(!set) return;
@@ -162,41 +171,55 @@ function showQuestion(){
   const pair=set[Math.floor(Math.random()*set.length)];
 
   if(lang==="es"){
-    question.innerText=pair[0]+" → Spanish";
-    currentAnswer=pair[1];
+    questionEl.innerText = pair[0] + " → Spanish";
+    currentAnswer = pair[1];
   } else {
-    question.innerText=pair[1]+" → English";
-    currentAnswer=pair[0];
+    questionEl.innerText = pair[1] + " → English";
+    currentAnswer = pair[0];
   }
 
-  document.getElementById("quiz-box").classList.remove("hidden");
+  answerEl.value = "";
+  feedbackEl.innerText = "";
+
+  quizBox.classList.remove("hidden");
+  answerEl.focus(); // 🔥 auto focus input
 }
 
+// CHECK ANSWER
 function checkAnswer(){
-  const input=answer.value.trim().toLowerCase();
+  const input=answerEl.value.trim().toLowerCase();
   const correct=currentAnswer.toLowerCase();
 
-  if(input===correct||input.includes(correct)||correct.includes(input)){
-    feedback.innerText="Correct!";
+  if(input === correct || input.includes(correct) || correct.includes(input)){
+    feedbackEl.innerText="Correct!";
+
     setTimeout(()=>{
-      quiz-box.classList.add("hidden");
-      answer.value="";
-      feedback.innerText="";
+      quizBox.classList.add("hidden"); // 🔥 RETURN TO GAME
       quizActive=false;
     },1000);
+
   } else {
-    feedback.innerText="Wrong! "+currentAnswer;
+    feedbackEl.innerText="Try again!";
   }
 }
 
-answer.addEventListener("keydown",e=>{
-  if(e.key==="Enter") checkAnswer();
+// ENTER KEY
+answerEl.addEventListener("keydown",e=>{
+  if(e.key==="Enter"){
+    checkAnswer();
+  }
 });
 
-setInterval(()=>{
-  if(!quizActive) showQuestion();
-},15000);
+// TIMER (15 seconds AFTER PAGE LOAD)
+setTimeout(()=>{
+  setInterval(()=>{
+    if(!quizActive){
+      showQuestion();
+    }
+  },15000);
+},3000); // small delay so game starts first
 
+// START GAME LOOP
 setInterval(draw,150);
 </script>
 

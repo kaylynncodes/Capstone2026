@@ -109,6 +109,17 @@ let snake=[{x:10,y:10}];
 let food={x:5,y:5};
 let dx=1,dy=0;
 
+let quizActive=false;
+let gameStarted=false;
+let currentAnswer="";
+
+// DOM
+const quizBox = document.getElementById("quiz-box");
+const questionEl = document.getElementById("question");
+const answerEl = document.getElementById("answer");
+const feedbackEl = document.getElementById("feedback");
+
+// INPUT
 document.addEventListener("keydown",e=>{
   if(e.key==="ArrowUp"){dx=0;dy=-1;}
   if(e.key==="ArrowDown"){dx=0;dy=1;}
@@ -116,6 +127,7 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowRight"){dx=1;dy=0;}
 });
 
+// ---------------- DRAW GAME ----------------
 function draw(){
   if(quizActive) return;
 
@@ -136,67 +148,85 @@ function draw(){
   ctx.fillRect(food.x*20,food.y*20,18,18);
 }
 
-// ---------------- STUDY SYSTEM ----------------
+// ---------------- DATA ----------------
 const params=new URLSearchParams(window.location.search);
-const mode=params.get("mode");
-const lang=params.get("lang")||"es";
+const mode=params.get("mode") || "emotions_vocab";
+const lang=params.get("lang") || "es";
 
 const data={
-  emotions_vocab:[["happy","feliz"],["sad","triste"],["angry","enojado"],["tired","cansado"],["excited","emocionado"]],
-  verbs_core:[["I have","yo tengo"],["I want","yo quiero"],["I need","yo necesito"]],
-  emotions_sentences:[["I am happy","estoy feliz"],["I am sad","estoy triste"]],
-  greetings:[["hello","hola"],["good morning","buenos días"]],
-  survival:[["where is the bathroom","dónde está el baño"],["i need help","necesito ayuda"]]
+  emotions_vocab:[
+    ["happy","feliz"],["sad","triste"],["angry","enojado"],
+    ["tired","cansado"],["excited","emocionado"],
+    ["scared","asustado"],["calm","tranquilo"]
+  ],
+
+  verbs_core:[
+    ["I am","yo soy/estoy"],
+    ["I have","yo tengo"],
+    ["I want","yo quiero"],
+    ["I need","yo necesito"],
+    ["I go","yo voy"]
+  ],
+
+  emotions_sentences:[
+    ["I am happy","estoy feliz"],
+    ["I feel sad","me siento triste"]
+  ],
+
+  greetings:[
+    ["hello","hola"],
+    ["good morning","buenos días"],
+    ["how are you","cómo estás"]
+  ],
+
+  survival:[
+    ["where is the bathroom","dónde está el baño"],
+    ["i need help","necesito ayuda"]
+  ]
 };
 
-let quizActive=false;
-let currentAnswer="";
-
-// DOM elements (fixes your bug)
-const quizBox = document.getElementById("quiz-box");
-const questionEl = document.getElementById("question");
-const answerEl = document.getElementById("answer");
-const feedbackEl = document.getElementById("feedback");
-
-// IMPORTANT: ensure quiz is hidden at start
-quizBox.classList.add("hidden");
-
-// SHOW QUESTION
+// ---------------- QUESTION SYSTEM ----------------
 function showQuestion(){
   const set=data[mode];
-  if(!set) return;
+
+  if(!set){
+    questionEl.innerText="Mode not found";
+    quizBox.classList.remove("hidden");
+    quizActive=true;
+    return;
+  }
 
   quizActive=true;
 
   const pair=set[Math.floor(Math.random()*set.length)];
 
   if(lang==="es"){
-    questionEl.innerText = pair[0] + " → Spanish";
-    currentAnswer = pair[1];
+    questionEl.innerText=pair[0] + " → Spanish";
+    currentAnswer=pair[1];
   } else {
-    questionEl.innerText = pair[1] + " → English";
-    currentAnswer = pair[0];
+    questionEl.innerText=pair[1] + " → English";
+    currentAnswer=pair[0];
   }
 
-  answerEl.value = "";
-  feedbackEl.innerText = "";
+  answerEl.value="";
+  feedbackEl.innerText="";
 
   quizBox.classList.remove("hidden");
-  answerEl.focus(); // 🔥 auto focus input
+  answerEl.focus();
 }
 
-// CHECK ANSWER
+// ---------------- ANSWER CHECK ----------------
 function checkAnswer(){
   const input=answerEl.value.trim().toLowerCase();
   const correct=currentAnswer.toLowerCase();
 
-  if(input === correct || input.includes(correct) || correct.includes(input)){
+  if(input===correct || input.includes(correct) || correct.includes(input)){
     feedbackEl.innerText="Correct!";
 
     setTimeout(()=>{
-      quizBox.classList.add("hidden"); // 🔥 RETURN TO GAME
+      quizBox.classList.add("hidden");
       quizActive=false;
-    },1000);
+    },900);
 
   } else {
     feedbackEl.innerText="Try again!";
@@ -205,23 +235,31 @@ function checkAnswer(){
 
 // ENTER KEY
 answerEl.addEventListener("keydown",e=>{
-  if(e.key==="Enter"){
-    checkAnswer();
-  }
+  if(e.key==="Enter") checkAnswer();
 });
 
-// TIMER (15 seconds AFTER PAGE LOAD)
+// ---------------- GAME LOOP ----------------
+function loop(){
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// ---------------- FLOW CONTROL ----------------
+
+// start game immediately
+loop();
+
+// FIRST QUESTION after delay (guaranteed)
 setTimeout(()=>{
-  setInterval(()=>{
-    if(!quizActive){
-      showQuestion();
-    }
-  },15000);
-},3000); // small delay so game starts first
+  showQuestion();
+},3000);
 
-// START GAME LOOP
-setInterval(draw,150);
+// repeat questions every 15s ONLY when not active
+setInterval(()=>{
+  if(!quizActive){
+    showQuestion();
+  }
+},15000);
 </script>
-
 </body>
 </html>

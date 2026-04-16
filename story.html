@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Story</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<script src="js/navbar.js"></script>
+<script src="js/lang.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="name"></h1>
+
+<div class="card">
+
+<p><strong>Location:</strong> <span id="location"></span></p>
+<p><strong>Languages:</strong> <span id="languages"></span></p>
+
+<br>
+
+<p><strong>Background:</strong></p>
+<p id="story"></p>
+
+<br>
+
+<p><strong>Struggles:</strong></p>
+<p id="struggle"></p>
+
+<br>
+
+<p><strong>What Helped:</strong></p>
+<p id="help"></p>
+
+<br>
+
+<p><strong>Advice:</strong></p>
+<p id="advice"></p>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { students } from "./js/studentsData.js";
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+const student = students[id];
+
+if(student){
+  document.getElementById("name").innerText = student.name + " — " + student.location;
+  document.getElementById("location").innerText = student.location;
+  document.getElementById("languages").innerText = student.languages;
+  document.getElementById("story").innerText = student.story;
+  document.getElementById("struggle").innerText = student.struggle;
+  document.getElementById("help").innerText = student.help;
+  document.getElementById("advice").innerText = student.advice;
+} else {
+  document.body.innerHTML = "<h1 style='text-align:center;'>Student not found</h1>";
+}
+
+</script>
+
+</body>
+</html>
